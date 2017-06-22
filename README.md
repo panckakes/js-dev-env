@@ -11,3 +11,11 @@ Testing
 [Mocha](https://mochajs.org/) Testing Framework
 [Chai](http://chaijs.com/) Assertion Library
 
+# run
+
+// initial install required packages
+// npm install
+
+// npm start -s
+// npm run build -s
+

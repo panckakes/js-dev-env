@@ -4,6 +4,11 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import WebpackMd5Hash from 'webpack-md5-hash';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
+const GLOBALS = {
+	'process.env.NODE_ENV': JSON.stringify('production'), //This global makes sure React is built in prod mode. https://facebook.github.io/react/downloads.html
+	__DEV__: false // potentially useful for feature flags. More info: https://github.com/petehunt/webpack-howto#6-feature-flags
+};
+
 export default {
 	debug: true,
 	devtool: 'source-map',
@@ -54,11 +59,18 @@ export default {
 
 		//minify JS
 		new webpack.optimize.UglifyJsPlugin(),
+
+		new webpack.DefinePlugin(GLOBALS),
+		new webpack.optimize.OccurenceOrderPlugin(),
 	],
 	module: {
 		loaders: [
 			{test: /\.js$/, exclude: /node_modules/, loaders: ['babel']},
-			{test: /\.css$/, loader: ExtractTextPlugin.extract('css?sourceMap')}
+			{test: /\.css$/, loader: ExtractTextPlugin.extract('css?sourceMap')},
+			{test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file"},
+			{test: /\.(woff|woff2)$/, loader: "url?prefix=font/&limit=5000"},
+			{test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/octet-stream"},
+			{test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=image/svg+xml"}
 		]
 	}
-}
+};
